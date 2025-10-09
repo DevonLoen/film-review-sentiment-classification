@@ -182,4 +182,4 @@ See the [LICENSE](./LICENSE) file for more details.
 
 **[Devon Marvellous Loen]**
 📧 [[devonloen99@gmail.com](mailto:devonloen99@gmail.com)]
-🔗 Project Link: [https://github.com/[DevonLoen]/[]](https://github.com/[DevonLoen]/[film-review-sentiment-classification])
+🔗 Project Link: [https://github.com/[DevonLoen]/[]](https://github.com/DevonLoen/film-review-sentiment-classification/)
