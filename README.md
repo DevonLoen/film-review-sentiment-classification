@@ -36,12 +36,15 @@ The primary goal of this project is to **experiment with various preprocessing t
 ├── data/               # Raw and processed datasets (e.g., CSV files) (excluded via .gitignore)
 ├── models/             # Trained model artifacts (.joblib, .pkl) (excluded via .gitignore)
 ├── notebooks/          # Jupyter notebooks for EDA and experimentation
-│   └── sentiment-classification.ipynb
+│   └── sentiment_classification.ipynb
 ├── src/                # Python scripts for preprocessing and training
-│   ├── preprocess.py
-│   └── train.py
+│   ├── __init__.py     # Marks this folder as a Python package
+│   ├── data_preprocessing.py    # Handles text preprocessing (cleaning, delete stopwords, etc.)
+│   └── model_training.py        # Script for training and saving the sentiment model
+│   └── predict.py               # Script for making sentiment predictions using the trained model
 ├── venv/               # Virtual environment (excluded via .gitignore)
 ├── .gitignore          # Files and folders to be ignored by Git
+├── main.py             # Entry Point
 ├── README.md           # Project documentation (you are here)
 ├── requirements.txt    # List of dependencies
 └── setup.py            # Project setup configuration for packaging/distribution
@@ -65,7 +68,7 @@ The primary goal of this project is to **experiment with various preprocessing t
 ## ⚙️ Workflow: Model Generation Steps
 
 The workflow to train and generate the sentiment analysis model is documented in
-`notebooks/sentiment-classification.ipynb`.
+`notebooks/sentiment_classification.ipynb`.
 
 ### 1. Data Loading & Exploration
 
@@ -92,7 +95,7 @@ The workflow to train and generate the sentiment analysis model is documented in
 ### 5. Model Training & Evaluation
 
 - Split dataset into **train/test** sets.
-- Train using algorithms such as **Logistic Regression** or **Naive Bayes**.
+- Train using algorithms **Naive Bayes**.
 - Evaluate with **Accuracy**, **Precision**, **Recall**, and **Confusion Matrix**.
 
 ### 6. Model Serialization
