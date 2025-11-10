@@ -70,39 +70,62 @@ The primary goal of this project is to **experiment with various preprocessing t
 The workflow to train and generate the sentiment analysis model is documented in
 `notebooks/sentiment_classification.ipynb`.
 
+## 🚀 Sentiment Classification Pipeline
+
 ### 1. Data Loading & Exploration
 
-- Load dataset (e.g., `data/reviews.csv`).
-- Inspect structure, size, and sentiment distribution (positive vs. negative).
+- **Pemuatan Data:** Memuat *dataset* ulasan film (e.g., `data/reviews.csv`). Jika file tidak ditemukan, *script* akan menggunakan data sampel untuk pengembangan.
+- **Inspeksi Data:** Memeriksa struktur, ukuran, dan distribusi sentimen (`positive` vs. `negative`).
+- **Penanganan Data:** Menangani **missing values** (nilai yang hilang) dan **duplicates** (data ganda) untuk memastikan kualitas data training.
+
+---
 
 ### 2. Exploratory Data Analysis (EDA)
 
-- Analyze review length distribution.
-- Generate **word clouds** for each sentiment.
-- Handle **missing values** and **duplicates**.
+- **Word Clouds:** Menghasilkan visualisasi *word cloud* untuk setiap kategori sentimen guna mengidentifikasi kata-kata kunci teratas.
+- **Analisis Panjang Review:** Menganalisis distribusi panjang teks untuk mengidentifikasi pola atau anomali data.
+- **Analisis N-gram:** Menganalisis frasa (bigram/trigram) teratas untuk menangkap konteks penting seperti negasi (**"tidak bagus"**).
 
-### 3. Text Preprocessing & Cleaning
+---
 
-- Convert text to lowercase.
-- Remove punctuation, numbers, and special characters.
-- Remove stop words (e.g., _“the”, “a”, “is”_).
-- _(Optional)_ Apply stemming or lemmatization.
+### 3. Text Preprocessing & Cleaning (Langkah Wajib)
+
+Langkah ini memastikan teks diubah ke format standar yang dipahami model:
+
+- **Lowercasing & Pembersihan:** Mengubah teks menjadi huruf kecil, menghapus angka, tanda baca, dan tag HTML.
+- **Stop Word Removal:** Menghapus kata-kata umum yang tidak menambah nilai sentimen (e.g., *"the", "is", "was"*).
+- **Lemmatization:** Mengubah kata-kata kembali ke bentuk dasarnya yang bermakna (e.g., *"running"* menjadi *"run"*), yang **harus** dikonsistenkan antara *training* dan *prediction*.
+
+---
 
 ### 4. Feature Engineering (Vectorization)
 
-- Convert text into numerical format using **TF-IDF (Term Frequency–Inverse Document Frequency)**.
+- **TF-IDF Vectorization:** Mengubah teks bersih menjadi representasi numerik menggunakan **Term Frequency–Inverse Document Frequency (TF-IDF)**.
+- **N-gram Inclusion:** Menggunakan `ngram_range=(1, 2)` dalam TF-IDF untuk menangkap *unigram* (kata tunggal) dan *bigram* (dua kata berurutan), meningkatkan akurasi kontekstual.
+- **Feature Selection:** Menggunakan **Chi-Square (`chi2`)** dan `SelectKBest` untuk memilih N fitur terbaik, mengurangi *noise* dan kompleksitas komputasi.
+
+---
 
 ### 5. Model Training & Evaluation
 
-- Split dataset into **train/test** sets.
-- Train using algorithms **Naive Bayes**.
-- Evaluate with **Accuracy**, **Precision**, **Recall**, and **Confusion Matrix**.
+- **Data Splitting:** Membagi *dataset* menjadi **Training Set** (untuk melatih model) dan **Test Set** (untuk evaluasi).
+- **Algoritma Utama:**
+    - **Optimized:** **Logistic Regression** (efektif untuk klasifikasi teks, dikenal karena kinerjanya yang kuat).
+- **Hyperparameter Tuning:** Menggunakan **GridSearchCV** untuk menemukan kombinasi *hyperparameter* terbaik (`C`, `solver`, dll.) pada Logistic Regression.
+- **Metrik Evaluasi:**
+    - **Accuracy:** Proporsi prediksi yang benar secara keseluruhan.
+    - **Precision, Recall, F1-Score:** Metrik yang lebih fokus pada performa model pada setiap kelas sentimen. **F1-Score** adalah metrik utama untuk keseimbangan.
+    - **Confusion Matrix:** Visualisasi yang jelas tentang hasil True Positive, False Positive, True Negative, dan False Negative.
 
-### 6. Model Serialization
+---
 
-- Save the trained model (including vectorizer) using `joblib`.
-- Store the final artifact in `models/` for later deployment.
+### 6. Model Serialization & Deployment Preparation
 
+- **Model Saving:** Menyimpan **TIGA** artefak penting menggunakan `joblib`:
+    1.  Model Terbaik (`best_model`).
+    2.  Fitted Vectorizer (`tfidf`).
+    3.  Fitted Feature Selector (`selector`).
+- **Storage:** Menyimpan artefak akhir di folder `models/` untuk memastikan kesiapan deployment (digunakan oleh *script* prediksi).
 ---
 
 ## 💻 Installation
@@ -149,18 +172,6 @@ pip install -r requirements.txt
 2. Open the notebook:
    `notebooks/sentiment-classification.ipynb`
 3. Run all cells sequentially to reproduce the full workflow.
-
-### Option 2 — Run via Script
-
-Execute the finalized training script:
-
-```bash
-python src/train.py
-```
-
-This will train the model and save it to the `models/` directory.
-
----
 
 ## 🔮 Future Improvements
 
